@@ -1,0 +1,32 @@
+blueprint:
+  id: wax-wash-trading-deduplicator
+  name: Wash Trading Deduplicator
+  tier: market-analytics
+  category: analytics
+  status: promoted
+  version: "0.5.0"
+  last_refined: "2026-10-18"
+
+metadata:
+  description: |
+    Soft wash-trade heuristics on sale events with raw vs clean volume.
+  related_blueprints:
+    - wax-collection-velocity-scatter-plot
+    - wax-funding-trail-lineage-graph
+    - wax-account-sybil-distance-scorer
+
+invariants:
+  - Pure detection
+  - Soft flags only
+  - Transparent methodology note
+
+features:
+  implemented:
+    - detectWashTrades, demos, app page
+
+machine_instructions:
+  - Use examples/engines.ts
+  - Map marketplace trades to SaleEvent at app edge
+
+technical_requirements:
+  framework: Next.js + TypeScript
