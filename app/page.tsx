@@ -14,6 +14,7 @@ type Mode = 'live' | 'wash' | 'clean';
 export default function WashTradingDeduplicator() {
   const [mode, setMode] = useState<Mode>('live');
   const [collection, setCollection] = useState('');
+  const [origin, setOrigin] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [liveResult, setLiveResult] = useState<WashCleanResult | null>(null);
@@ -35,6 +36,7 @@ export default function WashTradingDeduplicator() {
       const { sales, source } = await fetchRecentSales({
         limit: 50,
         collection: collection.trim() || undefined,
+        atomicBase: origin.trim() || undefined,
       });
       if (sales.length === 0) {
         setError('No sold listings returned.');
@@ -49,7 +51,7 @@ export default function WashTradingDeduplicator() {
     } finally {
       setLoading(false);
     }
-  }, [collection]);
+  }, [collection, origin]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white p-6">
@@ -98,6 +100,12 @@ export default function WashTradingDeduplicator() {
               onChange={(e) => setCollection(e.target.value)}
               className="flex-1 bg-black/60 border border-white/10 px-4 py-3 rounded-xl font-mono text-sm"
               placeholder="Optional collection_name"
+            />
+            <input
+              value={origin}
+              onChange={(e) => setOrigin(e.target.value)}
+              className="flex-1 bg-black/60 border border-white/10 px-4 py-3 rounded-xl font-mono text-sm"
+              placeholder="Custom Atomic origin (optional)"
             />
             <button
               type="button"

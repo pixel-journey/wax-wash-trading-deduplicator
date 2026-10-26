@@ -3,8 +3,10 @@
  */
 
 import type { SaleEvent } from "../types";
+import { ATOMIC_ORIGINS, salesUrl } from "./origins";
 
-export const DEFAULT_ATOMIC = "https://wax.api.atomicassets.io";
+export const DEFAULT_ATOMIC = ATOMIC_ORIGINS[0];
+export { ATOMIC_ORIGINS };
 
 interface AtomicSale {
   sale_id: string;
@@ -48,17 +50,13 @@ export async function fetchRecentSales(
     signal?: AbortSignal;
   } = {}
 ): Promise<{ sales: SaleEvent[]; source: string }> {
-  const base = (options.atomicBase || DEFAULT_ATOMIC).replace(/\/$/, "");
   const limit = options.limit ?? 50;
-  const params = new URLSearchParams({
-    state: "3",
-    limit: String(limit),
-    order: "desc",
-    sort: "updated",
-  });
-  if (options.collection) params.set("collection_name", options.collection);
+  const custom = options.atomicBase?.trim();
+  const origin = custom || DEFAULT_ATOMIC;
+  const built = salesUrl(origin, limit, options.collection);
+  if (!built.ok) throw new Error(built.reason);
 
-  const url = `${base}/atomicmarket/v1/sales?${params}`;
+  const url = built.url;
   const res = await fetch(url, {
     signal: options.signal,
     headers: { Accept: "application/json" },
