@@ -1,6 +1,13 @@
-# REFINEMENT_COMPLETION_REPORT.md
+# Wash trading deduplicator
 
-**Date:** 2026-10-18  
-**Status:** ✅ Promoted from README-only
+**Updated:** 2026-10-30
 
-Pure wash heuristics, clean volume, demos, app page.
+| Scope | Notes |
+|------|-------|
+| Engine | self / round-trip / ping-pong / tight cycle |
+| Live | AtomicMarket sold listings |
+| Education | myths, POLICY, CSV/MD export, vitest |
+
+```bash
+npm install && npm test
+```

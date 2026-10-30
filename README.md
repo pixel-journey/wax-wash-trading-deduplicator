@@ -1,25 +1,9 @@
 # wax-wash-trading-deduplicator
 
-> **Status:** 🔄 Promoted from concept (PX Perfection Standard v1.1)  
-> **Category:** Marketplace analytics  
-> **Parent Catalog:** [wax-ecosystem-blueprint-catalog](https://github.com/pixel-journey/wax-ecosystem-blueprint-catalog)
+> **Trust label:** `educational-reference`  
+> **Status:** Engine + live + education pass (2026-10-30)
 
-**Goal:** Detect soft **wash-trade patterns** in sale events and report **raw vs clean volume** — self-trades, round-trips, ping-pong pairs, tight low-price-range cycles.
-
-> Heuristics only. Not legal or exchange-surveillance conclusions. Legit market makers can look similar.
-
----
-
-## Quick Start
-
-```ts
-import { detectWashTrades } from "./examples/engines";
-
-const result = detectWashTrades(sales); // SaleEvent[]
-// result.cleanVolume, result.flags, result.cleanSales
-```
-
-## Heuristics
+Soft **wash-trade heuristics** on sale events → raw vs clean volume.
 
 | Kind | Idea |
 |------|------|
@@ -28,8 +12,12 @@ const result = detectWashTrades(sales); // SaleEvent[]
 | `ping_pong_pair` | ≥3 trades same pair/asset in window |
 | `tight_cycle` | many sales, <2% price range |
 
-## License
+Not legal conclusions. Market makers can look similar.
 
-MIT — **Pixel Journey**
+```bash
+npm install && npm test && npm run dev
+```
 
-*Promoted from README-only: October 2026*
+[POLICY.md](./POLICY.md)
+
+MIT — Pixel Journey

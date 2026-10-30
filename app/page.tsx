@@ -6,7 +6,13 @@ import {
   demoSalesWithWash,
   detectWashTrades,
 } from '../examples/engines';
+import {
+  downloadText,
+  exportFlagsCsv,
+  exportSummaryMarkdown,
+} from '../examples/exportCsv';
 import { fetchRecentSales } from '../examples/live/atomicmarket';
+import { WASH_MYTHS } from '../examples/myths';
 import type { WashCleanResult } from '../examples/types';
 
 type Mode = 'live' | 'wash' | 'clean';
@@ -17,6 +23,7 @@ export default function WashTradingDeduplicator() {
   const [origin, setOrigin] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
   const [liveResult, setLiveResult] = useState<WashCleanResult | null>(null);
   const [meta, setMeta] = useState<string | null>(null);
 
@@ -59,9 +66,31 @@ export default function WashTradingDeduplicator() {
         <div className="text-2xl tracking-widest text-emerald-400 mb-2 font-bold">
           WASH TRADING DEDUPLICATOR
         </div>
-        <div className="text-xs opacity-60 mb-6">
-          Pixel Journey · Live AtomicMarket or demo · Soft heuristics
+        <div className="text-xs opacity-60 mb-2">
+          Pixel Journey · educational-reference · soft heuristics
         </div>
+        <p className="text-xs opacity-50 mb-6 max-w-2xl">
+          Flags are not legal conclusions. Legit market makers can look similar.
+        </p>
+
+        <section
+          className="rounded-2xl border border-fuchsia-500/25 bg-fuchsia-500/5 p-4 text-xs space-y-3 max-w-2xl mb-6"
+          aria-label="Myths"
+        >
+          <h2 className="text-sm font-semibold text-fuchsia-100">Myths vs reality</h2>
+          {WASH_MYTHS.map((m) => (
+            <div key={m.myth}>
+              <p className="text-red-200/90">
+                <span className="opacity-60">Myth: </span>
+                {m.myth}
+              </p>
+              <p className="text-emerald-100/90 mt-0.5">
+                <span className="opacity-60">Reality: </span>
+                {m.reality}
+              </p>
+            </div>
+          ))}
+        </section>
 
         <div className="flex flex-wrap gap-2 mb-6">
           <button
@@ -123,6 +152,11 @@ export default function WashTradingDeduplicator() {
             {error}
           </div>
         )}
+        {status && (
+          <p className="mb-4 text-xs text-emerald-200/80" role="status">
+            {status}
+          </p>
+        )}
         {meta && (
           <div className="mb-4 text-xs opacity-50 break-all">{meta}</div>
         )}
@@ -156,6 +190,36 @@ export default function WashTradingDeduplicator() {
               </div>
             </div>
             <p className="text-xs opacity-60 mb-4">{result.methodologyNote}</p>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <button
+                type="button"
+                className="px-3 py-2 text-xs rounded-lg bg-emerald-900"
+                onClick={() => {
+                  downloadText(
+                    'wash-flags.csv',
+                    exportFlagsCsv(result),
+                    'text/csv;charset=utf-8'
+                  );
+                  setStatus('Flags CSV downloaded');
+                }}
+              >
+                Download flags CSV
+              </button>
+              <button
+                type="button"
+                className="px-3 py-2 text-xs rounded-lg bg-sky-900"
+                onClick={() => {
+                  downloadText(
+                    'wash-summary.md',
+                    exportSummaryMarkdown(result),
+                    'text/markdown;charset=utf-8'
+                  );
+                  setStatus('Summary MD downloaded');
+                }}
+              >
+                Download summary MD
+              </button>
+            </div>
             <ul className="space-y-2 text-xs">
               {result.flags.length === 0 && (
                 <li className="opacity-60">No flags on this set.</li>
@@ -177,7 +241,8 @@ export default function WashTradingDeduplicator() {
 
         <p className="text-xs opacity-60">
           Live: AtomicMarket sales →{' '}
-          <code className="text-emerald-400/80">detectWashTrades</code>.
+          <code className="text-emerald-400/80">detectWashTrades</code>. See
+          POLICY.md.
         </p>
       </div>
     </div>
