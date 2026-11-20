@@ -1,9 +1,9 @@
 # Soft flags on sales you already have
 
 **Trust label:** `educational-reference`  
-**Catalog:** [wax-ecosystem-blueprint-catalog](https://github.com/pixel-journey/wax-ecosystem-blueprint-catalog)
+**Catalog:** `wax-ecosystem-blueprint-catalog` (private index; not this public course)
 
-`detectWashTrades` reads a list of `{ id, at, seller, buyer, assetKey, price }`. It does not scan AtomicMarket. A return at 3600 seconds is a `round_trip`. A return at 3601 seconds is not. Both prices leave `cleanVolume` only when the flag hits.
+`detectWashTrades` reads a list of `{ id, at, seller, buyer, assetKey, price }`. It does not scan AtomicMarket. The wash demo is 7 sales, raw volume `135.1`, clean volume `50`, and one sale left. The clean demo is raw `42` and clean `42`, with no flags. A return at 3600 seconds is a `round_trip`. A return at 3601 seconds is not. Both prices leave `cleanVolume` only when the flag hits.
 
 | Kind | Predicate in `examples/engines.ts` |
 | --- | --- |

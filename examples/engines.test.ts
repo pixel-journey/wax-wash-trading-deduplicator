@@ -13,15 +13,18 @@ describe("detectWashTrades", () => {
       expect(kinds.has("self_trade")).toBe(true);
       expect(kinds.has("round_trip")).toBe(true);
       expect(kinds.has("ping_pong_pair")).toBe(true);
-      expect(r.cleanVolume).toBeLessThan(r.rawVolume);
-      expect(r.cleanSales.length).toBeLessThan(r.inputCount);
+      expect(r.inputCount).toBe(7);
+      expect(r.rawVolume).toBe(135.1);
+      expect(r.cleanVolume).toBe(50);
+      expect(r.cleanSales).toHaveLength(1);
     });
 
   it("keeps clean demo mostly clean",
     () => {
       const r = detectWashTrades(demoCleanSales());
       expect(r.flags.length).toBe(0);
-      expect(r.cleanVolume).toBe(r.rawVolume);
+      expect(r.rawVolume).toBe(42);
+      expect(r.cleanVolume).toBe(42);
     });
 
   it("flags a return at 3600 seconds and not at 3601", () => {
